@@ -1,0 +1,13 @@
+#! /bin/bash
+
+# ./setup <dd>
+
+if [ ! -d "$1" ]
+then
+    mkdir $1
+    cd $1
+    cp ../dayN.cpp day$1.cpp
+    touch input.txt sample.txt
+else
+    echo "Error: Day $1 already exists"
+fi
