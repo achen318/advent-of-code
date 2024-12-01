@@ -1,5 +1,3 @@
-# advent-of-code-2022
+# advent-of-code
 
-aoc done with c++
-
-each subdirectory has `sample.txt` and `input.txt` but they arent pushed
+Bruh bruh bruh
