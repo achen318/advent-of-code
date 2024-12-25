@@ -7,34 +7,11 @@ using namespace std;
 
 using ll = long long;
 
-ll split_stone(ll stone, unordered_map<ll, ll> &memo)
-{
-    ll result;
-
-    if (memo.find(stone) != memo.end())
-        return memo[stone];
-
-    if (stone == 0)
-        result = 1;
-    else if (to_string(stone).size() % 2 == 0)
-    {
-        ll left = stoll(to_string(stone).substr(0, to_string(stone).size() / 2));
-        ll right = stoll(to_string(stone).substr(to_string(stone).size() / 2));
-
-        result = split_stone(left, memo) + split_stone(right, memo);
-    }
-    else
-        result = 2024 * stone;
-
-    memo[stone] = result;
-    return result;
-}
-
 ll part_1(vector<ll> stones)
 {
     vector<ll> new_stones;
 
-    for (int i = 0; i < 25; ++i)
+    for (int _ = 0; _ < 25; ++_)
     {
         new_stones.clear();
 
@@ -62,15 +39,40 @@ ll part_1(vector<ll> stones)
 
 ll part_2(vector<ll> stones)
 {
-    unordered_map<ll, ll> memo;
+    unordered_map<ll, ll> stone_freq;
+    unordered_map<ll, ll> new_stone_freq;
+    ll num_stones = 0;
 
-    for (int i = 0; i < 75; ++i)
+    for (ll stone : stones)
+        ++stone_freq[stone];
+
+    for (int _ = 0; _ < 75; ++_)
     {
-        for (ll stone : stones)
-            split_stone(stone, memo);
+        new_stone_freq.clear();
+
+        for (auto [stone, freq] : stone_freq)
+        {
+            if (stone == 0)
+                new_stone_freq[1] += freq;
+            else if (to_string(stone).size() % 2 == 0)
+            {
+                ll left = stoll(to_string(stone).substr(0, to_string(stone).size() / 2));
+                ll right = stoll(to_string(stone).substr(to_string(stone).size() / 2));
+
+                new_stone_freq[left] += freq;
+                new_stone_freq[right] += freq;
+            }
+            else
+                new_stone_freq[2024 * stone] += freq;
+        }
+
+        stone_freq = new_stone_freq;
     }
 
-    return 0;
+    for (auto [_, freq] : stone_freq)
+        num_stones += freq;
+
+    return num_stones;
 }
 
 int main()
