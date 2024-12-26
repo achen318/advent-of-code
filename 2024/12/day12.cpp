@@ -100,7 +100,7 @@ int part_2(vector<string> &map)
     stack<pair<int, int>> stk;
 
     char target;
-    size_t area, corners, x, y;
+    size_t area, corners, adjacents, diagonals, x, y;
     bool n, ne, e, se, s, sw, w, nw;
 
     for (size_t i = 0; i < map.size(); ++i)
@@ -134,16 +134,19 @@ int part_2(vector<string> &map)
 
                 ++area;
 
-                if (n + e + s + w == 0)
+                adjacents = n + e + s + w;
+                diagonals = ne + se + sw + nw;
+
+                if (adjacents == 0)
                     corners += 4;
-                else if (n + e + s + w == 1)
+                else if (adjacents == 1)
                     corners += 2;
-                else if (n + e + s + w == 2 && !(n && s) && !(e && w))
-                    corners += 2 - (ne + se + sw + nw);
-                else if (n + e + s + w == 3)
-                    corners += 2 - (ne + se + sw + nw);
-                else if (n + e + s + w == 4)
-                    corners += 4 - (ne + se + sw + nw);
+                else if (adjacents == 2 && !(n && s) && !(e && w))
+                    corners += 2 - (diagonals);
+                else if (adjacents == 3)
+                    corners += 2 - (diagonals);
+                else if (adjacents == 4)
+                    corners += 4 - (diagonals);
 
                 if (n && !visited[x - 1][y])
                 {
